@@ -8,12 +8,12 @@ use Mabo;
 use App\OddEvent as OddEvent;
 use App\OddMarket as OddMarket;
 use App\OddMabo as OddMabo;
+
 class ActController extends Controller
 {
     //
     public function sobaIndex()
     {
-     
        set_time_limit(0);//設定網頁timeout的時間無限大
        $this->maboMarket();
        //$this->sobaMarketRefresh();
@@ -24,7 +24,22 @@ class ActController extends Controller
        $data=OddEvent::all();
        return view('soba',['datas'=>$data]);
        //dd(time() - strtotime($event->updated_at));  2631333149
+        /*
+        $events = OddEvent::all();
+        
+        $data = [];
+        foreach ($events as $event) {
+            $data[$event->event_id] = [
+                'league_name' => League::getName($event->league_name),
+                'home_name' => Team::getName($event->home_name),
+                'away_name' => Team::getName($event->away_name),
+            ];
+        }
+        return view('soba', ['datas' => $data]);
+        //dd(time() - strtotime($event->updated_at));  2631333149
+        */
     }
+
     public function maboIndex()
     {
        OddMabo::truncate();
@@ -36,16 +51,16 @@ class ActController extends Controller
     {
         $sobaEvent=OddEvent::all();
         $odd=Mabo::maboInitMarket($sobaEvent);
-        //dd($odd);
+        //dd(count($odd));
         for ($i=0; $i < count($odd); $i++){
           $marketData=new OddMabo();
           $marketData->event_id=$odd[$i]['event_id'];
-          $marketData->normal_h=$odd[$i]['normal_h'][0];
-          $marketData->normal_a=$odd[$i]['normal_a'][0];
-          $marketData->normal_s=$odd[$i]['normal_s'][0];
-          $marketData->normal_first_h=$odd[$i]['normal_first_h'][0];
-          $marketData->normal_first_a=$odd[$i]['normal_first_a'][0];
-          $marketData->normal_first_s=$odd[$i]['normal_first_s'][0];
+          $marketData->normal_h=$odd[$i]['normal_h'];
+          $marketData->normal_a=$odd[$i]['normal_a'];
+          $marketData->normal_s=$odd[$i]['normal_s'];
+          $marketData->normal_first_h=$odd[$i]['normal_first_h'];
+          $marketData->normal_first_a=$odd[$i]['normal_first_a']; 
+          $marketData->normal_first_s=$odd[$i]['normal_first_s'];
           $marketData->save();
         }
         
@@ -146,21 +161,21 @@ class ActController extends Controller
     {
        $eventName=Soba::sobaInitEvent();
        for ($i=0; $i < count($eventName[0]); $i++) { 
-	       	$eventData=new OddEvent();
-	       	$eventData->event_id=$eventName[0][$i];
-	       	$eventData->league_name=$eventName[1][$i];
-	       	$eventData->home_name=$eventName[2][$i];
-	       	$eventData->away_name=$eventName[3][$i];
-          $eventData->key_version=$eventName[4];
-	       	$eventData->save();
+            $eventData=new OddEvent();
+            $eventData->event_id=$eventName[0][$i];
+            $eventData->league_name=$eventName[1][$i];
+            $eventData->home_name=$eventName[2][$i];
+            $eventData->away_name=$eventName[3][$i];
+            $eventData->key_version=$eventName[4];
+            $eventData->save();
 
        }
        
     }
     public function sobaMarket()
     {
-    	$eventData=OddEvent::all();
-    	$odd=Soba::sobaInitMarket($eventData);
+        $eventData=OddEvent::all();
+        $odd=Soba::sobaInitMarket($eventData);
       for ($i=0; $i < count($eventData); $i++) { 
         $marketData=new OddMarket();
         $marketData->event_id=$eventData[$i]->event_id;

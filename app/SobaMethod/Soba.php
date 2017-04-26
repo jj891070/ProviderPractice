@@ -106,7 +106,7 @@ class Soba
 
           //取球隊及聯賽名稱//
           for ($i=0; $i <count($events) ; $i++) {
-          	$eventData[0][$i]=$events[$i]['EventID'];
+            $eventData[0][$i]=$events[$i]['EventID'];
             $ch3=curl_init();
             $options3 = array(
                      CURLOPT_URL            => 'http://192.168.113.7:8086/api/GetLeagueName',
@@ -158,7 +158,26 @@ class Soba
           //dd($eventData);
           return $eventData;
   }
+/*
+  public function sobaGetLeageName($leagueId)
+  {
+      $ch3=curl_init();
+      $options3 = array(
+          CURLOPT_URL            => 'http://192.168.113.7:8086/api/GetLeagueName',
+          CURLOPT_POST           => true,
+          CURLOPT_POSTFIELDS     => 'vendor_id=jP8MMqgExP0&league_id='.$leagueId,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_USERAGENT      => "Google Bot",
+      );
+      curl_setopt_array($ch3, $options3);
+      $original=curl_exec($ch3);
+      //dd($original);
+      curl_close($ch3);
 
+      return json_decode($original, true);
+  }
+
+*/
   public function sobaInitMarket($eventData)
   {
 

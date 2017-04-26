@@ -96,7 +96,7 @@
                     url: "{{ url('refresh2') }}",
                     success: function(res) {
                         api(res);
-                        console.info(res);
+                        //console.info(res);
                     },
                     error: function (err) {
                         console.warn(err);
@@ -109,7 +109,7 @@
                     url: "{{ url('refresh2') }}",
                     success: function(res) {
                         api(res);
-                        console.info(res);
+                        //console.info(res);
                           
                     },
                     error: function (err) {
@@ -125,9 +125,9 @@
                                 var host = '';
                                 var away = '';
                                 var save = '';
-                                host=obj['normal_h'][0].toString();
-                                away=obj['normal_a'][0].toString();
-                                save=obj['normal_s'][0].toString();
+                                host=obj['normal_h'].toString();
+                                away=obj['normal_a'].toString();
+                                save=obj['normal_s'].toString();
 
                                 if (host!=$('#normal_h' + obj['event_id']).html()) {
                                   //console.log(seeHost, '---', $('#normal_h' + obj['over_first'].id).text());
@@ -156,7 +156,7 @@
                                 save=obj['normal_first_s'].toString();
 
                                 if (host!=$('#normal_first_h' + obj['event_id']).html()) {
-                                  //console.log(seeHost, '---', $('#normal_first_h' + obj['over_first'].id).text());
+                                console.log(host, '---', $('#normal_first_h' + obj['event_id']).text());
                                   $('#normal_first_h' + obj['event_id']).html(host);
                                   $('#normal_first_h' + obj['event_id']).css('color', 'red');
                                 }

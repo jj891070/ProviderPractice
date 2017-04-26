@@ -6,13 +6,13 @@ namespace App\MaboMethod;
 class Mabo
 {
 	public function maboInitMarket(&$sobaEvent)
-	{
-		$maboOdd=$this->catch($sobaEvent);
+    {
+        $maboOdd=$this->catch($sobaEvent);
         return $maboOdd;
-	}
-	public function catch(&$sobaEvent)
-	{
-		$ch=curl_init();
+    }
+    public function catch(&$sobaEvent)
+    {
+        $ch=curl_init();
         $options = array(
                  CURLOPT_URL            => 'https://www.marathonbet.com/tw/popular/Football/?menu=11',
                  //CURLOPT_POST           => true,
@@ -43,42 +43,52 @@ class Mabo
         $maboOdd=[];
         $tmp='';
         for ($i=0; $i <count($sobaEvent) ; $i++) {
-        	$home=$sobaEvent[$i]->home_name;
-        	$away=$sobaEvent[$i]->away_name;
-        	for ($j=0; $j <count($maboEventData); $j++) {
-        		$valid1 = str_contains($maboEventData[$j],$home);
-        		$valid2 = str_contains($maboEventData[$j],$away);
-        		if($valid1==true||$valid2==true){
-        			$valid[0][$num]=$i;
+            $home=$sobaEvent[$i]->home_name;
+            $away=$sobaEvent[$i]->away_name;
+            for ($j=0; $j <count($maboEventData); $j++) {
+                $valid1 = str_contains($maboEventData[$j],$home);
+                $valid2 = str_contains($maboEventData[$j],$away);
+                if($valid1==true||$valid2==true){
+                    $valid[0][$num]=$i;
                     $valid[1][$num]=$sobaEvent[$i]->event_id;
                     preg_match_all('(data-event-name=\"'.$maboEventData[$j].'\".*?<\/tbody>)',$original,$maboMarketData[0][$i]);
                     $maboOdd[$num]['event_id']=$valid[1][$num];
                     preg_match_all('(Match_Result.1\">[0-9]+\.[0-9]+)',$maboMarketData[0][$i][0][0],$tmp);
-                    $maboOdd[$num]['normal_h']=preg_replace('/Match_Result.1\">/','',$tmp[0]);
+                    $tmp=preg_replace('/Match_Result.1\">/','',$tmp[0]);
+                    $maboOdd[$num]['normal_h']=$tmp[0];
+
                     preg_match_all('(Match_Result.3\">[0-9]+\.[0-9]+)',$maboMarketData[0][$i][0][0],$tmp);
-                    $maboOdd[$num]['normal_a']=preg_replace('/Match_Result.3\">/','',$tmp[0]);
+                    $tmp=preg_replace('/Match_Result.3\">/','',$tmp[0]);
+                    $maboOdd[$num]['normal_a']=$tmp[0];
+
                     preg_match_all('(Match_Result.draw\">[0-9]+\.[0-9]+)',$maboMarketData[0][$i][0][0],$tmp);
-                    $maboOdd[$num]['normal_s']=preg_replace('/Match_Result.draw\">/','',$tmp[0]);
+                    $tmp=preg_replace('/Match_Result.draw\">/','',$tmp[0]);
+                    $maboOdd[$num]['normal_s']=$tmp[0];
 
                     preg_match_all('(M2087270759mainRow" class="  asian-market-view.*? ")',$maboMarketData[0][$i][0][0],$tmp);
                     if(!str_contains($tmp[0][0],'view-off')){
+                        
                         preg_match_all('(Result_-_1st_Half.RN_H\">[0-9]+\.[0-9]+)',$maboMarketData[0][$i][0][0],$tmp);
-                        $maboOdd[$num]['normal_first_h']=preg_replace('/Result_-_1st_Half.RN_H\">/','',$tmp[0]);
-
+                        $tmp=preg_replace('/Result_-_1st_Half.RN_H\">/','',$tmp[0]);
+                        $maboOdd[$num]['normal_first_h']=$tmp[0];
+                        
                         preg_match_all('(Result_-_1st_Half.RN_A\">[0-9]+\.[0-9]+)',$maboMarketData[0][$i][0][0],$tmp);
-                        $maboOdd[$num]['normal_first_a']=preg_replace('/Result_-_1st_Half.RN_A\">/','',$tmp[0]);
-
+                        $tmp=preg_replace('/Result_-_1st_Half.RN_A\">/','',$tmp[0]);
+                        $maboOdd[$num]['normal_first_a']=$tmp[0];
+                        
                         preg_match_all('(Result_-_1st_Half.RN_D\">[0-9]+\.[0-9]+)',$maboMarketData[0][$i][0][0],$tmp);
-                        $maboOdd[$num]['normal_first_s']=preg_replace('/Result_-_1st_Half.RN_D\">/','',$tmp[0]);
+                        $tmp=preg_replace('/Result_-_1st_Half.RN_D\">/','',$tmp[0]);
+                        $maboOdd[$num]['normal_first_s']=$tmp[0];
                     }
 
 
                     //dd($maboOdd);
                     $num++;
-        			break;
-        		}
-        	}
+                    break;
+                }
+            }
         }
+        //dd($maboOdd);
         return $maboOdd;
         //----------------------------end---------------------------
         //--------------------抓取需要的原始碼--------------------

@@ -13,6 +13,7 @@ class OddEvent extends Model
     {
     	return $this->hasOne('App\OddMarket','event_id','event_id');
     }
+
     public function oddmabo()
     {
     	return $this->hasOne('App\OddMabo','event_id','event_id');
